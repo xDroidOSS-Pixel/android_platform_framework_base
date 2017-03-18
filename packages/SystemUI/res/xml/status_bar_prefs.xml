@@ -47,6 +47,13 @@
         android:key="bluetooth"
         android:title="@string/quick_settings_bluetooth_label"
         android:icon="@*android:drawable/ic_qs_bluetooth" />
+    
+    <!-- Bluetooth battery -->
+    <com.xd.mnmlist.preferences.SystemSettingSwitchPreference
+        android:key="bluetooth_show_battery"
+        android:title="@string/bluetooth_battery_title"
+        android:defaultValue="true"
+        android:icon="@drawable/ic_bluetooth_battery" />
 
     <com.android.systemui.tuner.StatusBarSwitch
         android:key="zen"

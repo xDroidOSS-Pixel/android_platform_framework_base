@@ -55,4 +55,6 @@
     <!-- Wi-Fi Standard icon -->
     <string name="show_wifi_standard_icon_title">Wi-Fi Standard icon</string>
 
+    <!-- Bluetooth status -->
+    <string name="bluetooth_battery_title">Bluetooth battery status</string>
 </resources>
