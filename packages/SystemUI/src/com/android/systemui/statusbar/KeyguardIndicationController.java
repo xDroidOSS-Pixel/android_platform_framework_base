@@ -200,7 +200,7 @@ public class KeyguardIndicationController {
     private long mChargingTimeRemaining;
     private int mChargingCurrent;
     private double mChargingVoltage;
-    private int mTemperature;
+    private float mTemperature;
     private String mBiometricErrorMessageToShowOnScreenOn;
     private final Set<Integer> mCoExFaceAcquisitionMsgIdsToShow;
     private final FaceHelpMessageDeferral mFaceAcquiredMessageDeferral;
