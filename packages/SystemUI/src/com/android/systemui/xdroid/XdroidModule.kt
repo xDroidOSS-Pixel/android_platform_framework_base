@@ -18,6 +18,7 @@ package com.android.systemui.xdroid
 
 import com.android.systemui.qs.tileimpl.QSTileImpl
 import com.android.systemui.qs.tiles.CellularTile
+import com.android.systemui.qs.tiles.PowerShareTile
 import com.android.systemui.qs.tiles.UsbTetherTile
 import com.android.systemui.qs.tiles.WifiTile
 
@@ -28,12 +29,17 @@ import dagger.multibindings.StringKey
 
 @Module
 interface XdroidModule {
-
     /** Inject CellularTile into tileMap in QSModule */
     @Binds
     @IntoMap
     @StringKey(CellularTile.TILE_SPEC)
     fun bindCellularTile(cellularTile: CellularTile): QSTileImpl<*>
+
+    /** Inject PowerShareTile into tileMap in QSModule */
+    @Binds
+    @IntoMap
+    @StringKey(PowerShareTile.TILE_SPEC)
+    fun bindPowerShareTile(powerShareTile: PowerShareTile): QSTileImpl<*>
 
     /** Inject UsbTetherTile into tileMap in QSModule */
     @Binds
