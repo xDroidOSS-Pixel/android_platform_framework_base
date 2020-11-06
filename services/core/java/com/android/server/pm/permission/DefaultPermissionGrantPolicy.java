@@ -946,6 +946,11 @@ final class DefaultPermissionGrantPolicy {
         for (String pkg : notifPackages) {
             grantPermissionsToSystemPackage(pm, pkg, userId, NOTIFICATION_PERMISSIONS);
         }
+        
+        // Flipendo
+        grantSystemFixedPermissionsToSystemPackage(pm,
+                getDefaultProviderAuthorityPackage("com.google.android.flipendo", userId),
+                userId, SUSPEND_APP_PERMISSIONS);
     }
 
     private String getDefaultSystemHandlerActivityPackageForCategory(PackageManagerWrapper pm,
