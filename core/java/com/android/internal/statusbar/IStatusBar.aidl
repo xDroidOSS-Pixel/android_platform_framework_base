@@ -347,6 +347,7 @@ oneway interface IStatusBar
     void showMediaOutputSwitcher(String packageName);
 
     /** xdroidOSS additions. */
+    void toggleCameraFlash();
 
     /**
      * Used to block or unblock usage of gestural navigation
