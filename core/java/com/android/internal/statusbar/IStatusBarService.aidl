@@ -229,4 +229,9 @@ interface IStatusBarService
 
     /** Shows rear display educational dialog */
     void showRearDisplayDialog(int currentBaseState);
+
+    /** xdroidOSS additions. */
+
+    /** Starts the default assistant app. */
+    void startAssist(in Bundle args);
 }
