@@ -49,6 +49,8 @@ import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.plugins.FalsingManager;
 import com.android.systemui.plugins.statusbar.StatusBarStateController;
 import com.android.systemui.qs.logging.QSLogger;
+import com.android.systemui.qs.tileimpl.QSTileImpl;
+import com.android.systemui.statusbar.policy.KeyguardStateController;
 
 import javax.inject.Inject;
 
@@ -57,7 +59,7 @@ import dagger.Lazy;
 /**
  * USB Tether quick settings tile
  */
-public class UsbTetherTile extends QSTileImpl<BooleanState> {
+public class UsbTetherTile extends SecureQSTile<BooleanState> {
 
     public static final String TILE_SPEC = "usb_tether";
 
@@ -84,10 +86,11 @@ public class UsbTetherTile extends QSTileImpl<BooleanState> {
             MetricsLogger metricsLogger,
             StatusBarStateController statusBarStateController,
             ActivityStarter activityStarter,
-            QSLogger qsLogger
+            QSLogger qsLogger,
+            KeyguardStateController keyguardStateController
     ) {
         super(host, backgroundLooper, mainHandler, falsingManager, metricsLogger,
-                statusBarStateController, activityStarter, qsLogger);
+                statusBarStateController, activityStarter, qsLogger, keyguardStateController);
         mMainHandler = mainHandler;
         mTetheringManager = mContext.getSystemService(TetheringManager.class);
     }
@@ -112,24 +115,13 @@ public class UsbTetherTile extends QSTileImpl<BooleanState> {
     }
 
     @Override
-    protected void handleClick(@Nullable View view) {
-        if (!mUsbConnected) {
+    protected void handleClick(@Nullable View view, boolean keyguardShowing) {
+        if (checkKeyguard(view, keyguardShowing)) {
             return;
         }
 
-        if (!mUsbTetherEnabled) {
-            Log.d(TAG, "Starting Usb tethering");
-            mTetheringManager.startTethering(new TetheringRequest.Builder(
-                    TetheringManager.TETHERING_USB).setShouldShowEntitlementUi(false).build(),
-                    ConcurrentUtils.DIRECT_EXECUTOR,
-                    new TetheringManager.StartTetheringCallback() {
-                        @Override
-                        public void onTetheringFailed(final int result) {
-                            Log.e(TAG, "onTetheringFailed");
-                        }
-                    });
-        } else {
-            mTetheringManager.stopTethering(TetheringManager.TETHERING_USB);
+        if (mUsbConnected) {
+            mTetheringManager.setUsbTethering(!mUsbTetherEnabled);
         }
     }
 
