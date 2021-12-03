@@ -654,6 +654,8 @@ public final class NotificationPanelViewController implements Dumpable {
     private Boolean mReTickerVisible = null;
     private boolean mIsAnimatingTicker = false;
     private boolean mIsDismissRequested = false;
+    
+    private boolean mBlockedGesturalNavigation = false;
 
     private final Runnable mFlingCollapseRunnable = () -> fling(0, false /* expand */,
             mNextCollapseSpeedUpFactor, false /* expandBecauseOfFalsing */);
@@ -3473,6 +3475,10 @@ public final class NotificationPanelViewController implements Dumpable {
         );
     }
 
+    public void setBlockedGesturalNavigation(boolean blocked) {
+        mBlockedGesturalNavigation = blocked;
+    }
+
     /** Updates notification panel-specific flags on {@link SysUiState}. */
     public void updateSystemUiStateFlags() {
         if (SysUiState.DEBUG) {
@@ -3484,7 +3490,7 @@ public final class NotificationPanelViewController implements Dumpable {
                 .setFlag(SYSUI_STATE_NOTIFICATION_PANEL_EXPANDED,
                         isFullyExpanded() && !mQsController.getExpanded())
                 .setFlag(SYSUI_STATE_QUICK_SETTINGS_EXPANDED,
-                        isFullyExpanded() && mQsController.getExpanded()).commitUpdate(mDisplayId);
+                        mBlockedGesturalNavigation || (isFullyExpanded() && mQsController.getExpanded())).commitUpdate(mDisplayId);
     }
 
     private void debugLog(String fmt, Object... args) {
