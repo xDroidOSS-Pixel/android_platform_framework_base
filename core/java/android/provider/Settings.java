@@ -5724,6 +5724,12 @@ public final class Settings {
         public static final String SYSTEM_MANAGER_RUNTIME_POWER_MODE = "system_manager_runtime_power_mode";
 
         /**
+         * Show app volume rows in volume panel
+         * @hide
+         */
+        public static final String SHOW_APP_VOLUME = "show_app_volume";
+        
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *

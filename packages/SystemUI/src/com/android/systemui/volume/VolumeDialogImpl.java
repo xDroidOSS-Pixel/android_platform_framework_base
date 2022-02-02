@@ -168,6 +168,8 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
 
     private static final String VOLUME_PANEL_ON_LEFT =
             Settings.Secure.VOLUME_PANEL_ON_LEFT;
+    public static final String SHOW_APP_VOLUME =
+            "system:" + Settings.System.SHOW_APP_VOLUME;
 
     private static final long USER_ATTEMPT_GRACE_PERIOD = 1000;
     private static final int UPDATE_ANIMATION_DURATION = 80;
@@ -332,6 +334,8 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     // Number of animating rows
     private int mAnimatingRows = 0;
 
+    private boolean mShowAppVolume = true;
+
     public VolumeDialogImpl(
             Context context,
             VolumeDialogController volumeDialogController,
@@ -392,6 +396,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         if (!mShowActiveStreamOnly) {
             mTunerService.addTunable(mTunable, VOLUME_PANEL_ON_LEFT);
         }
+        mTunerService.addTunable(mTunable, SHOW_APP_VOLUME);
 
         initDimens();
 
@@ -856,6 +861,9 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                         mControllerCallbackH.onConfigurationChanged();
                     });
                 }
+            } else if (SHOW_APP_VOLUME.equals(key)) {
+                mShowAppVolume =  TunerService.parseIntegerSwitch(newValue, true);
+                initAppVolumeH();
             }
         }
     };
@@ -1409,8 +1417,9 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     }
 
     public void initAppVolumeH() {
+        boolean showAppVolume = mShowAppVolume && shouldShowAppVolume();
         if (mAppVolumeView != null) {
-            mAppVolumeView.setVisibility(shouldShowAppVolume() ? VISIBLE : GONE);
+            mAppVolumeView.setVisibility(showAppVolume ? VISIBLE : GONE);
         }
         if (mAppVolumeIcon != null) {
             mAppVolumeIcon.setOnClickListener(v -> {
