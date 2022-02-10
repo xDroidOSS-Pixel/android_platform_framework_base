@@ -181,6 +181,7 @@ android_library {
         "motion_tool_lib",
         "vendor.lineage.powershare-V1.0-java",
         "xd.xdui-preference",
+        "faceunlock_framework",
     ],
     manifest: "AndroidManifest.xml",
 
