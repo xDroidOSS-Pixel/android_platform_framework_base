@@ -70,4 +70,7 @@
     <string name="screenrecord_hevc_switch_label">Enable HEVC</string>
     <string name="screenrecord_hevc_switch_summary">Use more efficient HEVC video encoding</string>
 
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Recognizing face...</string>
+
 </resources>
