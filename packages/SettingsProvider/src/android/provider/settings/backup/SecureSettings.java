@@ -227,5 +227,6 @@ public class SecureSettings {
         //xdroidOSS Additional
         Settings.Secure.TETHERING_ALLOW_VPN_UPSTREAMS,
         Settings.Secure.SHOW_WIFI_STANDARD_ICON,
+        Settings.Secure.IGNORE_AUTH_CONFIRMATION,
     };
 }
