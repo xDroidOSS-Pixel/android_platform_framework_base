@@ -104,6 +104,11 @@
         android:icon="@drawable/ic_statusbar_location" />
 
     <com.android.systemui.tuner.StatusBarSwitch
+        android:icon="@drawable/ic_statusbar_call_strength"
+        android:key="call_strength"
+        android:title="@string/status_bar_call_strength" />
+        
+    <com.android.systemui.tuner.StatusBarSwitch
         android:key="microphone"
         android:title="@string/status_bar_microphone"
         android:icon="@drawable/ic_statusbar_mic" />
