@@ -11233,6 +11233,12 @@ public final class Settings {
          * @hide
          */
         public static final String LOCK_SCREEN_WEATHER_ENABLED = "lockscreen_weather_enabled";
+        
+        /**
+         * Whether tod show Wi-Fi standard icon
+         * @hide
+         */
+        public static final String SHOW_WIFI_STANDARD_ICON = "show_wifi_standard_icon";
 
         /**
          * These entries are considered common between the personal and the managed profile,

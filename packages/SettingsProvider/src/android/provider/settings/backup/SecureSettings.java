@@ -225,6 +225,7 @@ public class SecureSettings {
         Settings.Secure.LOCK_SCREEN_WEATHER_ENABLED,
         Settings.Secure.ACCESSIBILITY_FONT_SCALING_HAS_BEEN_CHANGED,
         //xdroidOSS Additional
-        Settings.Secure.TETHERING_ALLOW_VPN_UPSTREAMS
+        Settings.Secure.TETHERING_ALLOW_VPN_UPSTREAMS,
+        Settings.Secure.SHOW_WIFI_STANDARD_ICON,
     };
 }
