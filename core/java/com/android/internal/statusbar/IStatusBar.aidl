@@ -349,6 +349,7 @@ oneway interface IStatusBar
 
     /** xdroidOSS additions. */
     void toggleCameraFlash();
+    void killForegroundApp();
 
     /**
      * Used to block or unblock usage of gestural navigation
