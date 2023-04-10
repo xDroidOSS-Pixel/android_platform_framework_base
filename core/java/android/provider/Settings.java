@@ -5711,6 +5711,19 @@ public final class Settings {
         public static final String LOCKSCREEN_BATTERY_INFO = "lockscreen_battery_info";
 
         /**
+         * System Manager gameboost level hook
+         * @hide
+         */
+        @Readable
+        public static final String SYSTEM_MANAGER_GAME_BOOST_LEVEL = "system_manager_game_boost_level";
+
+        /**
+         * System Manager runtime powermode level hook
+         * @hide
+         */
+        public static final String SYSTEM_MANAGER_RUNTIME_POWER_MODE = "system_manager_runtime_power_mode";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
@@ -11398,6 +11411,62 @@ public final class Settings {
          */
         @Readable
         public static final String WINDOW_IGNORE_SECURE = "window_ignore_secure";
+        
+        /**
+         * System Manager Aggressive Idle mode
+         * @hide
+         */
+        @Readable
+        public static final String SYSTEM_MANAGER_AGGRESSIVE_IDLE_MODE = "system_manager_aggressive_idle_mode";
+
+        /**
+         * System Manager Aggressive Idle mode trigger/callback
+         * @hide
+         */
+        @Readable
+        public static final String SYSTEM_MANAGER_AGGRESSIVE_IDLE_MODE_TRIGGER = "system_manager_aggressive_idle_mode_trigger";
+
+        /**
+         * System Manager will automatically disable wifi
+         * @hide
+         */
+        @Readable
+        public static final String SYSTEM_MANAGER_AGGRESSIVE_IDLE_MODE_WIFI_TOGGLE = "system_manager_aggressive_idle_mode_wifi_toggle";
+
+        /**
+         * System Manager will automatically disable bluetooth
+         * @hide
+         */
+        @Readable
+        public static final String SYSTEM_MANAGER_AGGRESSIVE_IDLE_MODE_BLUETOOTH_TOGGLE = "system_manager_aggressive_idle_mode_bluetooth_toggle";
+
+        /**
+         * System Manager will automatically disable data
+         * @hide
+         */
+        @Readable
+        public static final String SYSTEM_MANAGER_AGGRESSIVE_IDLE_MODE_CELLULAR_TOGGLE = "system_manager_aggressive_idle_mode_cellular_toggle";
+
+        /**
+         * System Manager will automatically disable location
+         * @hide
+         */
+        @Readable
+        public static final String SYSTEM_MANAGER_AGGRESSIVE_IDLE_MODE_LOCATION_TOGGLE = "system_manager_aggressive_idle_mode_location_toggle";
+
+        /**
+         * System Manager will override ringer mode
+         * @hide
+         */
+        @Readable
+        public static final String SYSTEM_MANAGER_AGGRESSIVE_IDLE_MODE_RINGER_MODE = "system_manager_aggressive_idle_mode_ringer_mode";
+        
+        /**
+         * Adaptive charging
+         * @hide
+         */
+        @Readable
+        public static final String SYS_ADAPTIVE_CHARGING_ENABLED = "sys_adaptive_charging_enabled";
 
         /**
          * These entries are considered common between the personal and the managed profile,

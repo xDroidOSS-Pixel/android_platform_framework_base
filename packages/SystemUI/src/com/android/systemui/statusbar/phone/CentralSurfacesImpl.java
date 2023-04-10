@@ -257,6 +257,8 @@ import com.android.wm.shell.bubbles.Bubbles;
 import com.android.wm.shell.startingsurface.SplashscreenContentDrawer;
 import com.android.wm.shell.startingsurface.StartingSurface;
 
+import com.android.systemui.power.PowerNotificationWarnings;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
@@ -3592,11 +3594,11 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
             if (!isSysManagerIstantiated) {
                 SystemManagerUtils.initSystemManager(mContext);
                 isSysManagerIstantiated = true;
-                SystemManagerUtils.startIdleService();
-                SystemManagerUtils.cacheCleaner(CentralSurfaces.getPackageManagerForUser(mContext, mLockscreenUserManager.getCurrentUserId()));
-            } else {
-                SystemManagerUtils.startIdleService();
-                SystemManagerUtils.cacheCleaner(CentralSurfaces.getPackageManagerForUser(mContext, mLockscreenUserManager.getCurrentUserId()));
+            }
+            try {
+                performSystemManagerService(1);
+            } catch (Exception e) {
+                Log.d("System Manager", "Caught an exception during performSystemMangerService, System Manager might not be initialized!");
             }
         }
 
@@ -3665,8 +3667,56 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
 
             });
             DejankUtils.stopDetectingBlockingIpcs(tag);
-            SystemManagerUtils.cancelIdleService(mContext);
+            if (!isSysManagerIstantiated) {
+                SystemManagerUtils.initSystemManager(mContext);
+                isSysManagerIstantiated = true;
+            }
+            try {
+                performSystemManagerService(0);
+            } catch (Exception e) {
+            	Log.d("System Manager", "Caught an exception during performSystemMangerService, System Manager might not be initialized!");
+            }
         }
+
+	public void performSystemManagerService(int trigger) {
+	    if (mContext == null) return;
+	    NotificationManager notifMan = mContext.getSystemService(NotificationManager.class);
+	    if (trigger == 1) {
+		SystemManagerUtils.startIdleService(mContext);
+		SystemManagerUtils.killBackgroundProcesses(mContext);
+		PackageManager pm = CentralSurfaces.getPackageManagerForUser(mContext, mLockscreenUserManager.getCurrentUserId());
+	    } else {
+		SystemManagerUtils.cancelIdleService();
+	    }
+
+	    int userId = mLockscreenUserManager.getCurrentUserId();
+	    boolean isAggressiveIdleEnabled = Settings.Secure.getIntForUser(
+		    mContext.getContentResolver(),
+		    Settings.Secure.SYSTEM_MANAGER_AGGRESSIVE_IDLE_MODE,
+		    0,
+		    userId) == 1;
+
+	    if (isAggressiveIdleEnabled) {
+		Settings.Secure.putIntForUser(
+		        mContext.getContentResolver(),
+		        Settings.Secure.SYSTEM_MANAGER_AGGRESSIVE_IDLE_MODE_TRIGGER,
+		        trigger,
+		        userId);
+
+		PackageManager pm = CentralSurfaces.getPackageManagerForUser(mContext, userId);
+		SystemManagerUtils.deepClean(mContext, pm , trigger == 1);
+	    }
+	    PowerNotificationWarnings.showSystemManagerNotification(mContext, notifMan, isAggressiveIdleEnabled);
+
+	   boolean isCharging = mKeyguardIndicationController.isDeviceCharging();
+	   boolean isAdaptiveChargingEnabled = Settings.Secure.getIntForUser(
+		        mContext.getContentResolver(),
+		        Settings.Secure.SYS_ADAPTIVE_CHARGING_ENABLED,
+		        1,
+		        userId) == 1;
+	    SystemManagerUtils.enterPowerSaveMode(mContext, isCharging && isAdaptiveChargingEnabled);
+	    PowerNotificationWarnings.showAdaptiveChargeNotification(mContext, notifMan, isCharging && isAdaptiveChargingEnabled);
+	}
 
         @Override
         public void onFinishedWakingUp() {
