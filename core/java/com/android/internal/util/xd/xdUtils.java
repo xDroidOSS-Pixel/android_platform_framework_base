@@ -359,10 +359,6 @@ public class xdUtils {
 
             mSystemManagerAggresiveMode = Settings.Secure.getIntForUser(mContext.getContentResolver(),
                     Settings.Secure.SYSTEM_MANAGER_AGGRESSIVE_IDLE_MODE, 0, UserHandle.USER_CURRENT) == 1;
-
-            SettingsObserver observer = new SettingsObserver(new Handler(Looper.getMainLooper()));
-            observer.observe();
-            observer.update();
         }
 
         private TelephonyManager getTelephonyManager() {
@@ -586,7 +582,7 @@ public class xdUtils {
             }
         }
 
-        private void setAMTriggerState(boolean aggressiveTriggerState) {
+        public void setAMTriggerState(boolean aggressiveTriggerState) {
             if (mSystemManagerAggresiveMode == aggressiveTriggerState) {
                 return;
             }
@@ -598,37 +594,6 @@ public class xdUtils {
                 return;
             }
             disableAggressiveMode();
-
-        }
-
-        class SettingsObserver extends ContentObserver {
-            SettingsObserver(Handler handler) {
-                super(handler);
-            }
-
-            void observe() {
-                ContentResolver resolver = mContext.getContentResolver();
-                resolver.registerContentObserver(Settings.Secure.getUriFor(
-                        Settings.Secure.SYSTEM_MANAGER_AGGRESSIVE_IDLE_MODE), false, this,
-                        UserHandle.USER_ALL);
-                resolver.registerContentObserver(Settings.Secure.getUriFor(
-                        Settings.Secure.SYSTEM_MANAGER_AGGRESSIVE_IDLE_MODE_TRIGGER), false, this,
-                        UserHandle.USER_ALL);
-            }
-
-            @Override
-            public void onChange(boolean selfChange, Uri uri) {
-                update();
-            }
-
-            void update() {
-                final boolean agressiveModeEnabled = Settings.Secure.getIntForUser(mContext.getContentResolver(),
-                        Settings.Secure.SYSTEM_MANAGER_AGGRESSIVE_IDLE_MODE, 0, UserHandle.USER_CURRENT) == 1;
-                final boolean amTriggerState = Settings.Secure.getIntForUser(mContext.getContentResolver(),
-                        Settings.Secure.SYSTEM_MANAGER_AGGRESSIVE_IDLE_MODE_TRIGGER, 0, UserHandle.USER_CURRENT) == 1;
-
-                setAMTriggerState(agressiveModeEnabled ? amTriggerState : false);
-            }
         }
     }
 
