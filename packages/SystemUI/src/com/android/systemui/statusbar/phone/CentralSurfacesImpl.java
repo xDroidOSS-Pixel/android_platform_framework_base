@@ -519,9 +519,6 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
     @VisibleForTesting
     NotificationPanelViewController mNotificationPanelViewController;
 
-   // System Manager
-    private boolean isSysManagerInstantiated = false;
-
     // settings
     private QSPanelController mQSPanelController;
     @VisibleForTesting
@@ -889,7 +886,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
         mFingerprintManager = fingerprintManager;
         mTunerService = tunerService;
         mSysUiState = sysUiState;
-        systemManager = new SystemManagerUtils();
+        systemManager = new SystemManagerUtils(mContext);
 
         mLockscreenShadeTransitionController = lockscreenShadeTransitionController;
         mStartingSurfaceOptional = startingSurfaceOptional;
@@ -3591,10 +3588,6 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
             }
 
             DejankUtils.stopDetectingBlockingIpcs(tag);
-            if (!isSysManagerInstantiated) {
-                systemManager.initSystemManager(mContext);
-                isSysManagerInstantiated = true;
-            }
             performSystemManagerService(true);
 
         }
@@ -3668,14 +3661,14 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
         }
 
         public void performSystemManagerService(boolean idle) {
-            if (!isSysManagerInstantiated || mContext == null) {
+            if (mContext == null) {
                 return;
             }
             if (idle) {
-                systemManager.startIdleService(mContext);
-                systemManager.killBackgroundProcesses(mContext);
+                systemManager.startIdleService();
+                systemManager.killBackgroundProcesses();
             } else {
-                systemManager.cancelIdleService(mContext);
+                systemManager.cancelIdleService();
             }
         }
 
