@@ -314,7 +314,7 @@ public class ActivityTaskSupervisor implements RecentTasks.Callbacks {
      * Cached value of the topmost resumed activity in the system. Updated when new activity is
      * resumed.
      */
-    private ActivityRecord mTopResumedActivity;
+    public ActivityRecord mTopResumedActivity;
 
     /**
      * Flag indicating whether we're currently waiting for the previous top activity to handle the
@@ -1881,6 +1881,10 @@ public class ActivityTaskSupervisor implements RecentTasks.Callbacks {
         checkReadyForSleepLocked(false /* allowDelay */);
 
         return timedout;
+    }
+
+    public ActivityRecord getTopResumedActivity() {
+        return mTopResumedActivity;
     }
 
     void comeOutOfSleepIfNeededLocked() {
