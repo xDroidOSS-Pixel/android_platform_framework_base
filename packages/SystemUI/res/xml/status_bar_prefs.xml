@@ -112,10 +112,10 @@
         android:title="@string/status_bar_alarm"
         android:icon="@drawable/ic_statusbar_alarm" />
 
-    <com.android.systemui.tuner.StatusBarSwitch
+    <!--com.android.systemui.tuner.StatusBarSwitch
         android:key="location"
         android:title="@string/status_bar_location"
-        android:icon="@drawable/ic_statusbar_location" />
+        android:icon="@drawable/ic_statusbar_location" /-->
 
     <com.android.systemui.tuner.StatusBarSwitch
         android:icon="@drawable/ic_statusbar_call_strength"
@@ -132,11 +132,11 @@
         android:title="@string/quick_settings_camera_label"
         android:icon="@drawable/ic_statusbar_camera" />
 
-    <com.android.systemui.tuner.BatteryPreference
+    <!--com.android.systemui.tuner.BatteryPreference
         android:title="@string/battery"
         android:icon="@*android:drawable/ic_battery"
         android:summary="%s"
-        android:entries="@array/battery_options" />
+        android:entries="@array/battery_options" /-->
 
     <com.android.systemui.tuner.ClockPreference
         android:title="@string/tuner_time"
