@@ -208,7 +208,7 @@ public class KeyguardIndicationController {
     private boolean mInited;
     private boolean mFaceDetectionRunning;
     
-    private boolean mIsCharging;
+    private boolean mIsCharging = false;
 
     private IBatteryPropertiesRegistrar mBatteryPropertiesRegistrar;
     private boolean mAlternateFastchargeInfoUpdate;
@@ -534,7 +534,7 @@ public class KeyguardIndicationController {
     }
 
     private void updateLockScreenBatteryMsg(boolean animate) {
-        if (mPowerPluggedIn || mEnableBatteryDefender) {
+        if ((mPowerPluggedIn || mEnableBatteryDefender) && mIsCharging) {
             String powerIndication = computePowerIndication();
             if (DEBUG_CHARGING_SPEED) {
                 powerIndication += ",  " + (mChargingWattage / 1000) + " mW";
@@ -975,10 +975,10 @@ public class KeyguardIndicationController {
         if (!TextUtils.isEmpty(mAlignmentIndication)) {
             mTopIndicationView.setTextColor(mContext.getColor(R.color.misalignment_text_color));
             return mAlignmentIndication;
-        } else if (mPowerPluggedIn || mEnableBatteryDefender) {
+        } else if ((mPowerPluggedIn || mEnableBatteryDefender) && mIsCharging) {
             return computePowerIndication();
         } else {
-            return NumberFormat.getPercentInstance().format(mBatteryLevel / 100f);
+            return "";
         }
     }
 
@@ -986,6 +986,9 @@ public class KeyguardIndicationController {
      * Assumption: device is charging
      */
     protected String computePowerIndication() {
+        if (!mIsCharging) {
+            return "";
+        }
         int chargingId;
         if (mBatteryOverheated) {
             chargingId = R.string.keyguard_plugged_in_charging_limited;
@@ -995,6 +998,8 @@ public class KeyguardIndicationController {
             return mContext.getResources().getString(R.string.keyguard_charged);
         }
 
+        boolean mAdaptiveCharging = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                                Settings.Secure.SYS_ADAPTIVE_CHARGING_ENABLED, 1, UserHandle.USER_CURRENT) == 1;
         final boolean hasChargingTime = mChargingTimeRemaining > 0;
         if (mPowerPluggedInWired) {
             switch (mChargingSpeed) {
@@ -1027,12 +1032,9 @@ public class KeyguardIndicationController {
                     ? R.string.keyguard_indication_charging_time
                     : R.string.keyguard_plugged_in;
         }
-
-        boolean isAdaptiveCharging = Settings.Secure.getIntForUser(mContext.getContentResolver(),
-                                Settings.Secure.SYS_ADAPTIVE_CHARGING_ENABLED, 1, UserHandle.USER_CURRENT) == 1;
-
-        if (isAdaptiveCharging) {
-            chargingId = hasChargingTime
+        
+        if (mAdaptiveCharging) {
+           chargingId = hasChargingTime
                             ? R.string.keyguard_indication_adaptive_charging_time
                             : R.string.keyguard_plugged_in_adaptive_charging;
         }
@@ -1076,10 +1078,6 @@ public class KeyguardIndicationController {
             String chargingText =  mContext.getResources().getString(chargingId, percentage);
             return chargingText + batteryInfo;
         }
-    }
-
-    public boolean isDeviceCharging() {
-        return mIsCharging;
     }
 
     public void setStatusBarKeyguardViewManager(
